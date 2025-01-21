@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Team Selector</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      margin: 5px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #teams {
+      margin-top: 20px;
+      text-align: left;
+      display: inline-block;
+    }
+    .team {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+    .team h3 {
+      margin: 0 0 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Random Team Selector</h1>
+  <button onclick="generateRandomTeams()">Select Teams</button>
+  <button onclick="resetTeams()">Reset</button>
+  <div id="teams"></div>
+
+  <script>
+    function generateRandomTeams() {
+      const totalRollNumbers = 60;
+      const totalTeams = 12;
+      const rollsPerTeam = Math.floor(totalRollNumbers / totalTeams);
+
+      // Generate an array of roll numbers (1 to 60)
+      const rollNumbers = Array.from({ length: totalRollNumbers }, (_, i) => i + 1);
+
+      // Shuffle the roll numbers randomly
+      for (let i = rollNumbers.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rollNumbers[i], rollNumbers[j]] = [rollNumbers[j], rollNumbers[i]];
+      }
+
+      // Divide the shuffled roll numbers into teams
+      const teamsContainer = document.getElementById('teams');
+      teamsContainer.innerHTML = ''; // Clear previous content
+      for (let i = 0; i < totalTeams; i++) {
+        const teamRolls = rollNumbers.slice(i * rollsPerTeam, (i + 1) * rollsPerTeam);
+        const teamDiv = document.createElement('div');
+        teamDiv.className = 'team';
+        teamDiv.innerHTML = `<h3>Team ${i + 1}</h3><p>Roll Numbers: ${teamRolls.join(', ')}</p>`;
+        teamsContainer.appendChild(teamDiv);
+      }
+    }
+
+    function resetTeams() {
+      // Clear the teams container
+      const teamsContainer = document.getElementById('teams');
+      teamsContainer.innerHTML = '';
+
+      // Optionally display a message (or do nothing)
+      teamsContainer.innerHTML = '<p>Teams have been reset. Click "Select Teams" to generate new teams.</p>';
+    }
+  </script>
+</body>
+</html>

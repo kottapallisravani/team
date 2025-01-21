@@ -52,6 +52,19 @@
       const totalTeams = 12;
       const rollsPerTeam = Math.floor(totalRollNumbers / totalTeams);
 
+      // Custom team names
+      const teamNames = [
+        'Lakalaka', 'Gacchabouli', 'Kobbari Matta', 'Kevvu Keka', 'Sudigadu',
+        'Kithkithalu', 'Relangi', 'Arjun Reddy', 'Chandramukhi', 'Kanchana',
+        'Ganga', 'Conjuring'
+      ];
+
+      // Shuffle the team names randomly to assign them dynamically
+      for (let i = teamNames.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [teamNames[i], teamNames[j]] = [teamNames[j], teamNames[i]];
+      }
+
       // Generate an array of roll numbers (1 to 60)
       const rollNumbers = Array.from({ length: totalRollNumbers }, (_, i) => i + 1);
 
@@ -68,7 +81,7 @@
         const teamRolls = rollNumbers.slice(i * rollsPerTeam, (i + 1) * rollsPerTeam);
         const teamDiv = document.createElement('div');
         teamDiv.className = 'team';
-        teamDiv.innerHTML = `<h3>Team ${i + 1}</h3><p>Roll Numbers: ${teamRolls.join(', ')}</p>`;
+        teamDiv.innerHTML = `<h3>${teamNames[i]}</h3><p>Roll Numbers: ${teamRolls.join(', ')}</p>`;
         teamsContainer.appendChild(teamDiv);
       }
     }

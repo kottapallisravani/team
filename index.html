@@ -23,10 +23,15 @@
     button:hover {
       background-color: #45a049;
     }
-    #teams {
+    #teams-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
       margin-top: 20px;
+    }
+    .column {
+      flex: 1;
       text-align: left;
-      display: inline-block;
     }
     .team {
       margin: 10px 0;
@@ -34,9 +39,25 @@
       border: 1px solid #ddd;
       border-radius: 5px;
       background-color: #f9f9f9;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .team:hover {
+      background-color: #e3f2fd;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
     }
     .team h3 {
       margin: 0 0 5px;
+    }
+    .team p {
+      margin: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .team:hover p {
+      white-space: normal;
     }
   </style>
 </head>
@@ -44,7 +65,10 @@
   <h1>Random Team Selector</h1>
   <button onclick="generateRandomTeams()">Select Teams</button>
   <button onclick="resetTeams()">Reset</button>
-  <div id="teams"></div>
+  <div id="teams-container">
+    <div class="column" id="left-column"></div>
+    <div class="column" id="right-column"></div>
+  </div>
 
   <script>
     function generateRandomTeams() {
@@ -59,7 +83,7 @@
         'Ganga', 'Conjuring'
       ];
 
-      // Shuffle the team names randomly to assign them dynamically
+      // Shuffle the team names randomly
       for (let i = teamNames.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [teamNames[i], teamNames[j]] = [teamNames[j], teamNames[i]];
@@ -74,25 +98,30 @@
         [rollNumbers[i], rollNumbers[j]] = [rollNumbers[j], rollNumbers[i]];
       }
 
-      // Divide the shuffled roll numbers into teams
-      const teamsContainer = document.getElementById('teams');
-      teamsContainer.innerHTML = ''; // Clear previous content
+      // Clear previous content
+      const leftColumn = document.getElementById('left-column');
+      const rightColumn = document.getElementById('right-column');
+      leftColumn.innerHTML = '';
+      rightColumn.innerHTML = '';
+
+      // Divide teams into left and right columns
       for (let i = 0; i < totalTeams; i++) {
         const teamRolls = rollNumbers.slice(i * rollsPerTeam, (i + 1) * rollsPerTeam);
         const teamDiv = document.createElement('div');
         teamDiv.className = 'team';
         teamDiv.innerHTML = `<h3>${teamNames[i]}</h3><p>Roll Numbers: ${teamRolls.join(', ')}</p>`;
-        teamsContainer.appendChild(teamDiv);
+
+        if (i < totalTeams / 2) {
+          leftColumn.appendChild(teamDiv);
+        } else {
+          rightColumn.appendChild(teamDiv);
+        }
       }
     }
 
     function resetTeams() {
-      // Clear the teams container
-      const teamsContainer = document.getElementById('teams');
-      teamsContainer.innerHTML = '';
-
-      // Optionally display a message (or do nothing)
-      teamsContainer.innerHTML = '<p>Teams have been reset. Click "Select Teams" to generate new teams.</p>';
+      document.getElementById('left-column').innerHTML = '';
+      document.getElementById('right-column').innerHTML = '';
     }
   </script>
 </body>
